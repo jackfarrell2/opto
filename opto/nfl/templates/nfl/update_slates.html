@@ -11,41 +11,88 @@
         </div>
         <ul class="list-group">
             {% for slate in slates %}
-            <form action="{% url 'delete_slate' slate.id %}" method="post">
-                {% csrf_token %}
-                <div class="row m-1">
-                    <div class="col-8 mx-auto text-center">
-                        <li class="list-group-item">
-                            <p class="ms-auto">{{ slate }}</p>
-                            <!-- <button class="btn btn-danger me-auto" type="submit">Delete</button> -->
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteSlate">
-                                Delete
-                            </button>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="deleteSlate" tabindex="-1">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteSlateLabel">Delete Slate</h5>
-                                            <button type="button" class="close" data-dismiss="modal">
-                                                <span>&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this slate?<br>({{ slate }})
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">No</button>
-                                            <button type="submit" class="btn btn-danger">Yes</button>
-                                        </div>
-                                    </div>
+            <div class="row m-1">
+                <div class="col-8 mx-auto text-center">
+                    <li class="list-group-item">
+                        <div class="container">
+                            <div class="row m-1">
+                                <div class="col-8 mx-auto text-center">
+                                    <p class="ms-auto">{{ slate }}</p>
                                 </div>
                             </div>
-                        </li>
-                    </div>
+                            <div class="row m-1">
+                                <div class="col-7 text-end">
+                                    <form action="{% url 'update_default_projections' slate.id %}" method="post"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <button type="button" class="btn btn-warning" data-toggle="modal"
+                                            data-target="#update-default-projections">
+                                            Update Default Projections
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="update-default-projections" tabindex="-1">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="update-default-projectionsLabel">
+                                                            Update
+                                                            Default
+                                                            Projections
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span>&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <input class="form-control" type="file" id="formFile"
+                                                            name="default-projections-csv" accept=".csv">
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success">Upload</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-5 text-start">
+                                    <form action="{% url 'delete_slate' slate.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                                            data-target="#deleteSlate">
+                                            Delete
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deleteSlate" tabindex="-1">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteSlateLabel">Delete Slate</h5>
+                                                        <button type="button" class="close" data-dismiss="modal">
+                                                            <span>&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this slate?<br>({{ slate }})
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">No</button>
+                                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 </div>
+            </div>
             </form>
             {% endfor %}
     </div>

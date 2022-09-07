@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from csv import DictReader
-import os
 from .models import Game, Player, Team, Slate, Position
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from codecs import iterdecode
 from datetime import datetime
 from backports.zoneinfo import ZoneInfo
+from fuzzywuzzy import fuzz
 
 
 def update_slates(request):
@@ -96,6 +96,47 @@ def add_slate(request):
                         slate=slate)
         player.save()
     return HttpResponseRedirect(reverse('update_slates'))
+
+
+def update_default_projections(request, slate):
+    # Accept csv
+    projection_file = request.FILES['default-projections-csv']
+    csv = DictReader(iterdecode(projection_file, 'utf-8'))
+    this_slate = Slate.objects.get(pk=slate)
+    all_players = Player.objects.filter(slate=this_slate)
+    for row in csv:
+        player_name = row['Player']
+        try:
+            player = Player.objects.get(name=player_name, slate=this_slate)
+        except:
+            for each_player in all_players:
+                ratio = fuzz.ratio(each_player.name, player_name)
+                if ratio > 85:
+                    player = each_player
+                    player.projection = row['FFPts']
+                    player.save()
+                    break
+                stripped_db_name = ""
+                for ch in each_player.name:
+                    if ch.isalpha():
+                        stripped_db_name += ch
+                stripped_csv_name = ""
+                for ch in player_name:
+                    if ch.isalpha():
+                        stripped_csv_name +=ch
+                ratio = fuzz.ratio(stripped_db_name, stripped_csv_name)
+                partial_ratio = fuzz.partial_ratio(stripped_db_name, stripped_csv_name)
+                if ratio > 75 and partial_ratio > 85:
+                    player = each_player
+                    player.projection = row['FFPts']
+                    player.save()
+                    break
+            continue
+        player.projection = row['FFPts']
+        player.save()
+    return HttpResponseRedirect(reverse('update_slates'))
+    
+
 
 
 def index(request):
