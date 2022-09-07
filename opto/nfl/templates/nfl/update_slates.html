@@ -2,14 +2,17 @@
 {% load static %}
 {% block main %}
 {% if slates %}
+<!-- Current slate info-->
 <section class="p-5 bg-light text-dark">
     <div class="container">
         <div class="row m-1">
             <div class="col-8 mx-auto text-center">
+                <!-- Activate Slates -->
                 <h3>Active Slates</h3>
             </div>
         </div>
         <ul class="list-group">
+            <!-- Each activate slate -->
             {% for slate in slates %}
             <div class="row m-1">
                 <div class="col-8 mx-auto text-center">
@@ -17,11 +20,14 @@
                         <div class="container">
                             <div class="row m-1">
                                 <div class="col-8 mx-auto text-center">
+                                    <!-- Slate info -->
                                     <p class="ms-auto">{{ slate }}</p>
                                 </div>
                             </div>
+                            <!-- Alter slate option -->
                             <div class="row m-1">
                                 <div class="col-7 text-end">
+                                    <!-- Update default projections -->
                                     <form action="{% url 'update_default_projections' slate.id %}" method="post"
                                         enctype="multipart/form-data">
                                         {% csrf_token %}
@@ -29,7 +35,6 @@
                                             data-target="#update-default-projections">
                                             Update Default Projections
                                         </button>
-
                                         <!-- Modal -->
                                         <div class="modal fade" id="update-default-projections" tabindex="-1">
                                             <div class="modal-dialog" role="document">
@@ -58,6 +63,7 @@
                                         </div>
                                     </form>
                                 </div>
+                                <!-- Delete slate -->
                                 <div class="col-5 text-start">
                                     <form action="{% url 'delete_slate' slate.id %}" method="post">
                                         {% csrf_token %}
@@ -100,6 +106,7 @@
     </div>
 </section>
 {% else %}
+<!-- No active slates -->
 <section class="p-5 bg-light text-dark">
     <div class="container">
         <div class="row m-1">
@@ -109,6 +116,7 @@
         </div>
     </div>
 </section>
+<!-- Add a slate -->
 {% endif %}
 <section class="p-1 bg-light text-dark">
     <div class="container">

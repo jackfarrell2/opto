@@ -8,7 +8,7 @@ class Slate(models.Model):
 
     def __str__(self):
         est_version = self.date.astimezone(timezone("America/New_York"))
-        time = est_version.strftime("%a %m/%d/%Y, %I:%M")
+        time = est_version.strftime("%a %m/%d/%Y, %I:%M%p")
         return f"{time} - {self.game_count} games"
 
 

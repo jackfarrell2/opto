@@ -102,42 +102,55 @@ def update_default_projections(request, slate):
     # Accept csv
     projection_file = request.FILES['default-projections-csv']
     csv = DictReader(iterdecode(projection_file, 'utf-8'))
-    this_slate = Slate.objects.get(pk=slate)
+    this_slate = Slate.objects.get(pk=slate)  # Set slate
+    # Pattern match names that don't match
     all_players = Player.objects.filter(slate=this_slate)
     for row in csv:
         player_name = row['Player']
         try:
+            # Check if there is a perfect match
             player = Player.objects.get(name=player_name, slate=this_slate)
         except:
+            # Check if there is a sudo-match
             for each_player in all_players:
+                # Check un-altered names
                 ratio = fuzz.ratio(each_player.name, player_name)
                 if ratio > 85:
+                    # Store sudo match
                     player = each_player
                     player.projection = row['FFPts']
                     player.save()
                     break
+                # Check altered names
+                # Alter first name
                 stripped_db_name = ""
                 for ch in each_player.name:
                     if ch.isalpha():
                         stripped_db_name += ch
+                # Alter second name
                 stripped_csv_name = ""
                 for ch in player_name:
                     if ch.isalpha():
-                        stripped_csv_name +=ch
+                        stripped_csv_name += ch
                 ratio = fuzz.ratio(stripped_db_name, stripped_csv_name)
-                partial_ratio = fuzz.partial_ratio(stripped_db_name, stripped_csv_name)
+                partial_ratio = fuzz.partial_ratio(stripped_db_name,
+                                                   stripped_csv_name)
+                # Store sudo match
                 if ratio > 75 and partial_ratio > 85:
                     player = each_player
                     player.projection = row['FFPts']
                     player.save()
                     break
             continue
+        # Store perfect match
         player.projection = row['FFPts']
         player.save()
     return HttpResponseRedirect(reverse('update_slates'))
-    
-
 
 
 def index(request):
-    return render(request, 'nfl/index.html')
+    all_slates = Slate.objects.all().order_by('date')
+    slate = all_slates[0]
+    players = Player.objects.filter(slate=slate)
+    context = {'players': players}
+    return render(request, 'nfl/index.html', context)

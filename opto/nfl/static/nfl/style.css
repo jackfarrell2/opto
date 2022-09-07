@@ -1,0 +1,6 @@
+.scrollable {
+    height: 600px;
+    width: 600px;
+    overflow-x: auto;
+    overflow-y: auto;
+}

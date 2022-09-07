@@ -1,4 +1,9 @@
 {% extends "nfl/layout.html" %}
-{% for player in players %}
-<p>{{ player }}</p>
-{% endfor %}
+{% load static %}
+{% block main %}
+<div class="scrollable">
+    {% for player in players %}
+    <p>{{ player }} - {{ player.projection }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
