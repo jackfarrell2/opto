@@ -1,0 +1,27 @@
+body::before {
+    display: block;
+    content: '';
+    height: 72px;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+.footer {
+    flex-shrink: 0;
+}
+
+@media(min-width: 768px) {
+    .
+}

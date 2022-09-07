@@ -1,0 +1,38 @@
+{% extends "users/layout.html" %}
+{% load static %}
+{% block main %}
+<section class="p-5 bg-light text-dark">
+    <div class="container">
+        <div class="row m-2">
+            <div class="col-sm-4 mx-auto text-center">
+                <h2>Login</h2>
+            </div>
+            {% if message %}
+            <div class="row m-2">
+                <div class="col-sm-4 mx-auto text-center">{{ message }}</div>
+            </div>
+            {% endif %}
+        </div>
+        <form action="{% url 'login' %}" method="post">
+            {% csrf_token %}
+            <div class="row m-2">
+                <div class="col-sm-6  col-md-4 mx-auto text-center"><input class="form-control" autofocus type="text"
+                        name="username" placeholder="Username"></div>
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-6 col-md-4 mx-auto text-center"><input class="form-control" type="password"
+                        name="password" placeholder="Password"></div>
+            </div>
+            <div class="row m-2">
+                <div class="col-sm-6 col-md-4 mx-auto text-center"><input class="btn btn-outline-dark" type="submit"
+                        value="Login"></div>
+            </div>
+        </form>
+        <div class="row m-2">
+            <div class="col-sm-6 col-md-4 mx-auto text-center">
+                <p class="pt-3">Don't have an account? <a href="{% url 'register' %}">Register here.</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
