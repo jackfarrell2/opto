@@ -23,5 +23,5 @@ urlpatterns = [
     path('logout', users.views.logout_view, name='logout'),
     path('register', users.views.register_view, name='register'),
     path('admin/', admin.site.urls),
-    path('nfl/', include('nfl.urls'))
+    path('nfl/', include('nfl.urls')),
 ]
